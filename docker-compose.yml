@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: database
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - "mongo-db-data:/data/db"
+    networks:
+      - localhost
+    restart: always
+  rest-api:
+    container_name: rest-api
+    image: task-management-server:latest
+    env_file: .env
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    networks:
+      - localhost
+    restart: on-failure
+
+volumes:
+  mongo-db-data:
+
+
+networks:
+  localhost:
+
+
